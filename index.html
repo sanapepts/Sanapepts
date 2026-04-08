@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SanaPepts - Un Camino hacia el Bienestar Animal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #769f8c;
+            --secondary: #f4f1ea;
+            --accent: #d4a373;
+            --text-dark: #2d3436;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            background-color: #ffffff;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, .nav-logo {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+        }
+        .text-soft-green { color: var(--primary); }
+        .bg-soft-green { background-color: var(--primary); }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #5d8272;
+            transform: translateY(-2px);
+        }
+
+        /* Timeline Advanced Styles */
+        .timeline-container {
+            position: relative;
+            padding-left: 3rem;
+        }
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--primary), rgba(118, 159, 140, 0.1));
+            border-radius: 2px;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 4rem;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -2.6rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 4px solid #111827;
+            z-index: 10;
+        }
+        .timeline-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .timeline-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: scale(1.02);
+        }
+        .timeline-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Cart Styles */
+        #cart-sidebar {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .cart-open #cart-sidebar {
+            transform: translateX(0);
+        }
+        .cart-closed #cart-sidebar {
+            transform: translateX(100%);
+        }
+        #cart-overlay {
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+        .cart-open #cart-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="cart-closed">
+
+    <!-- Overlay Carrito -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-[60] opacity-0"></div>
+
+    <!-- Sidebar Carrito -->
+    <aside id="cart-sidebar" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-[70] shadow-2xl flex flex-col transform">
+        <div class="p-6 border-b flex justify-between items-center bg-gray-50">
+            <h2 class="text-xl font-bold flex items-center gap-2">
+                <i class="fas fa-shopping-basket text-soft-green"></i> Tu Pedido
+            </h2>
+            <button id="close-cart" class="text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+        
+        <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-4">
+            <!-- Items se cargan por JS -->
+            <div class="text-center py-10 text-gray-400">
+                <i class="fas fa-shopping-cart text-5xl mb-4 block"></i>
+                <p>El carrito está vacío</p>
+            </div>
+        </div>
+
+        <div class="p-6 border-t bg-gray-50">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-gray-500 font-medium">Total estimado:</span>
+                <span id="cart-total" class="text-2xl font-bold text-gray-900">$0.00</span>
+            </div>
+            <button id="checkout-btn" class="w-full btn-primary text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-green-900/10">
+                <i class="fab fa-whatsapp"></i> Finalizar por WhatsApp Seguro
+            </button>
+            <p class="text-[10px] text-gray-400 text-center mt-4 uppercase tracking-widest">Pago contra entrega o transferencia segura</p>
+        </div>
+    </aside>
+
+    <!-- Navegación -->
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl font-bold text-soft-green nav-logo">SanaPepts</span>
+                    <i class="fas fa-heart text-soft-green"></i>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#inicio" class="text-gray-600 hover:text-soft-green font-medium transition">Inicio</a>
+                    <a href="#beneficios" class="text-gray-600 hover:text-soft-green font-medium transition">Lo que descubrí</a>
+                    <a href="#historia-sana" class="text-gray-600 hover:text-soft-green font-medium transition">Historia de Sana</a>
+                    <a href="#catalogo" class="text-gray-600 hover:text-soft-green font-medium transition">Productos</a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button id="open-cart" class="relative p-2 text-gray-600 hover:text-soft-green transition">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-soft-green text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                    </button>
+                    <a href="#contacto" class="hidden md:block border-2 border-soft-green text-soft-green px-6 py-2 rounded-full text-sm font-bold hover:bg-soft-green hover:text-white transition">Contacto</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="inicio" class="pt-40 pb-24 px-4 bg-gradient-to-b from-[#f8faf9] to-white">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl text-gray-900 mb-8 max-w-4xl mx-auto leading-tight">
+                Buscando el bienestar de los que <span class="text-soft-green">más amamos</span>.
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Comparto mi experiencia con el <strong>BPC 157</strong>. Una alternativa inyectable que cambió la vida de mi familia animal y que hoy quiero que más personas conozcan.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#historia-sana" class="btn-primary text-white px-10 py-5 rounded-full font-bold shadow-xl">Ver historia de Sana</a>
+                <a href="#catalogo" class="bg-white text-gray-800 border border-gray-200 px-10 py-5 rounded-full font-bold hover:bg-gray-50 transition">Comprar BPC 157</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Beneficios Breve -->
+    <section id="beneficios" class="py-24 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl text-gray-900 mb-4">¿Por qué recomiendo el BPC 157?</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">He aprendido que este péptido no solo actúa en un lugar; su capacidad de reparación integral es lo que lo hace tan especial para nuestras mascotas.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-[#fdfcf9] p-8 rounded-3xl border border-orange-100 shadow-sm">
+                    <div class="text-orange-500 mb-6 text-3xl"><i class="fas fa-hand-holding-heart"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Estómago</h3>
+                    <p class="text-gray-500 text-sm">Protege el tracto digestivo tras años de medicación crónica.</p>
+                </div>
+                <div class="bg-[#f9fafb] p-8 rounded-3xl border border-blue-100 shadow-sm">
+                    <div class="text-blue-500 mb-6 text-3xl"><i class="fas fa-bone"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Huesos</h3>
+                    <p class="text-gray-500 text-sm">Soporte esencial en espondilosis y problemas degenerativos.</p>
+                </div>
+                <div class="bg-[#f9fbf9] p-8 rounded-3xl border border-green-100 shadow-sm">
+                    <div class="text-green-500 mb-6 text-3xl"><i class="fas fa-walking"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Músculos</h3>
+                    <p class="text-gray-500 text-sm">Repara tejidos blandos y mejora la movilidad drásticamente.</p>
+                </div>
+                <div class="bg-[#fbf9fb] p-8 rounded-3xl border border-purple-100 shadow-sm">
+                    <div class="text-purple-500 mb-6 text-3xl"><i class="fas fa-brain"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Nervios</h3>
+                    <p class="text-gray-500 text-sm">Ayuda a la regeneración neuronal en compresiones de columna.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Historia de Éxito: Sana -->
+    <section id="historia-sana" class="py-24 px-4 bg-gray-900 text-white overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-soft-green font-bold tracking-widest uppercase text-sm mb-2 block">Bitácora de vida</span>
+                <h2 class="text-4xl md:text-5xl mb-6">Nuestra Historia con Sana</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Aquí comparto cómo fue evolucionando Sana paso a paso desde que descubrimos este camino.</p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-12 items-start">
+                <div class="lg:w-2/3 w-full">
+                    <div class="timeline-container">
+                        <!-- Punto 1 -->
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-card">
+                                <div class="flex flex-col md:flex-row gap-6">
+                                    <div class="md:w-1/2">
+                                        <h4 class="text-xl font-bold text-soft-green mb-2">Día 1: El Diagnóstico</h4>
+                                        <p class="text-gray-400 text-sm leading-relaxed">Sana apenas podía moverse. El dolor cervical era agudo. Se veía triste y agotada.</p>
+                                    </div>
+                                    <div class="md:w-1/2"><img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80&w=400" class="timeline-img" alt="Sana Día 1"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Punto 2 -->
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-card">
+                                <div class="flex flex-col md:flex-row-reverse gap-6">
+                                    <div class="md:w-1/2">
+                                        <h4 class="text-xl font-bold text-soft-green mb-2">Mes 1: El Milagro</h4>
+                                        <p class="text-gray-400 text-sm leading-relaxed">¡Sana volvió a trotar! La rigidez desapareció y su vitalidad es la de un cachorro de nuevo.</p>
+                                    </div>
+                                    <div class="md:w-1/2"><img src="https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&q=80&w=400" class="timeline-img" alt="Sana Mes 1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/3 w-full lg:sticky lg:top-24">
+                    <div class="bg-white/5 p-8 rounded-[2rem] border border-white/10">
+                        <h3 class="text-xl font-bold mb-6 text-soft-green">Recomendación Personal</h3>
+                        <p class="text-gray-400 text-sm mb-6 italic">"No vendemos productos, compartimos lo que funcionó para salvar a mi mascota. El BPC 157 es, para mí, el descubrimiento más grande en salud animal."</p>
+                        <a href="#catalogo" class="block text-center btn-primary text-white py-3 rounded-full font-bold">Ver producto usado por Sana</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catálogo de Productos Reales -->
+    <section id="catalogo" class="py-24 px-4 bg-[#fcfcfc]">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl mb-4">Lo que puedes adquirir</h2>
+                <p class="text-gray-500">Productos originales y testeados que usamos en nuestros propios protocolos.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Producto 1 -->
+                <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm flex flex-col group">
+                    <div class="aspect-square bg-gray-50 rounded-2xl mb-6 overflow-hidden flex items-center justify-center relative">
+                        <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=400" alt="BPC-157 5mg" class="w-2/3 group-hover:scale-110 transition duration-500">
+                        <span class="absolute top-4 left-4 bg-soft-green text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase">El de Sana</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">Péptido BPC-157 (5mg)</h3>
+                    <p class="text-gray-400 text-xs mb-4">Vial inyectable liofilizado de alta pureza.</p>
+                    <div class="mt-auto flex items-center justify-between">
+                        <span class="text-xl font-bold text-gray-900">$185.000</span>
+                        <button onclick="addToCart('BPC-157 5mg', 185000)" class="bg-soft-green text-white w-12 h-12 rounded-xl flex items-center justify-center hover:bg-[#5d8272] transition">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Producto 2 -->
+                <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm flex flex-col group">
+                    <div class="aspect-square bg-gray-50 rounded-2xl mb-6 overflow-hidden flex items-center justify-center relative">
+                        <img src="https://images.unsplash.com/photo-1615461066841-6116ecaaba7d?auto=format&fit=crop&q=80&w=400" alt="Agua Bacteriostática" class="w-2/3 group-hover:scale-110 transition duration-500">
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">Agua Bacteriostática</h3>
+                    <p class="text-gray-400 text-xs mb-4">Para reconstitución segura de péptidos (30ml).</p>
+                    <div class="mt-auto flex items-center justify-between">
+                        <span class="text-xl font-bold text-gray-900">$45.000</span>
+                        <button onclick="addToCart('Agua Bacteriostática', 45000)" class="bg-soft-green text-white w-12 h-12 rounded-xl flex items-center justify-center hover:bg-[#5d8272] transition">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Producto 3 -->
+                <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm flex flex-col group opacity-60">
+                    <div class="aspect-square bg-gray-100 rounded-2xl mb-6 overflow-hidden flex items-center justify-center relative grayscale">
+                        <i class="fas fa-flask text-4xl text-gray-300"></i>
+                        <span class="absolute top-4 left-4 bg-gray-400 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase">Próximamente</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1 text-gray-400">TB-500 (Regenerativo)</h3>
+                    <p class="text-gray-400 text-xs mb-4">Potenciador de reparación de tejidos profundos.</p>
+                    <div class="mt-auto flex items-center justify-between">
+                        <span class="text-xl font-bold text-gray-300">Pendiente</span>
+                        <button class="bg-gray-200 text-gray-400 w-12 h-12 rounded-xl flex items-center justify-center cursor-not-allowed">
+                            <i class="fas fa-lock"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto" class="bg-gray-900 text-white pt-20 pb-10 px-4">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 mb-12 border-b border-white/5 pb-12">
+            <div class="col-span-2">
+                <span class="text-3xl font-bold text-soft-green nav-logo block mb-6">SanaPepts</span>
+                <p class="text-gray-400 max-w-sm mb-6">Compartiendo experiencias y bienestar para nuestras familias animales.</p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6">Información</h4>
+                <ul class="space-y-3 text-gray-500 text-sm">
+                    <li><a href="#" class="hover:text-white transition">Cómo reconstituir</a></li>
+                    <li><a href="#" class="hover:text-white transition">Protocolo de Sana</a></li>
+                    <li><a href="#" class="hover:text-white transition">Dosis Sugeridas</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6">Consultas</h4>
+                <p class="text-gray-500 text-sm mb-4">¿Dudas sobre cómo empezar?</p>
+                <p class="text-soft-green font-bold">experiencia@sanapepts.com</p>
+            </div>
+        </div>
+        <div class="text-center text-gray-600 text-xs">
+            <p>&copy; 2024 SanaPepts - Bienestar Animal Consentido.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-24 right-10 bg-gray-900 text-white px-6 py-3 rounded-2xl shadow-2xl translate-y-32 transition-transform duration-300 z-[100] flex items-center gap-3">
+        <i class="fas fa-check-circle text-soft-green"></i>
+        <span id="toast-msg">Agregado al pedido</span>
+    </div>
+
+    <script>
+        // Variables Globales
+        let cart = [];
+        const body = document.body;
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartTotalDisplay = document.getElementById('cart-total');
+        const cartCountDisplay = document.getElementById('cart-count');
+        const toast = document.getElementById('toast');
+
+        // Toggle Carrito
+        document.getElementById('open-cart').addEventListener('click', () => {
+            body.classList.remove('cart-closed');
+            body.classList.add('cart-open');
+        });
+
+        document.getElementById('close-cart').addEventListener('click', () => {
+            body.classList.add('cart-closed');
+            body.classList.remove('cart-open');
+        });
+
+        cartOverlay.addEventListener('click', () => {
+            body.classList.add('cart-closed');
+            body.classList.remove('cart-open');
+        });
+
+        // Funciones del Carrito
+        function addToCart(name, price) {
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.qty++;
+            } else {
+                cart.push({ name, price, qty: 1 });
+            }
+            renderCart();
+            showToast(`¡${name} agregado!`);
+        }
+
+        function removeFromCart(name) {
+            cart = cart.filter(item => item.name !== name);
+            renderCart();
+        }
+
+        function updateQty(name, delta) {
+            const item = cart.find(item => item.name === name);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) removeFromCart(name);
+                else renderCart();
+            }
+        }
+
+        function renderCart() {
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+            let count = 0;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-10 text-gray-400">
+                        <i class="fas fa-shopping-cart text-5xl mb-4 block"></i>
+                        <p>Aún no has seleccionado productos</p>
+                    </div>`;
+            } else {
+                cart.forEach(item => {
+                    total += item.price * item.qty;
+                    count += item.qty;
+                    const div = document.createElement('div');
+                    div.className = 'flex items-center justify-between bg-gray-50 p-4 rounded-2xl border border-gray-100';
+                    div.innerHTML = `
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-sm text-gray-800">${item.name}</h4>
+                            <p class="text-soft-green font-bold text-xs">$${(item.price * item.qty).toLocaleString()}</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center border rounded-lg bg-white">
+                                <button onclick="updateQty('${item.name}', -1)" class="px-2 py-1 text-gray-400 hover:text-red-500">-</button>
+                                <span class="px-2 text-xs font-bold">${item.qty}</span>
+                                <button onclick="updateQty('${item.name}', 1)" class="px-2 py-1 text-gray-400 hover:text-soft-green">+</button>
+                            </div>
+                            <button onclick="removeFromCart('${item.name}')" class="text-gray-300 hover:text-red-400 px-2">
+                                <i class="fas fa-trash-alt text-sm"></i>
+                            </button>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(div);
+                });
+            }
+
+            cartTotalDisplay.innerText = `$${total.toLocaleString()}`;
+            cartCountDisplay.innerText = count;
+        }
+
+        function showToast(msg) {
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('translate-y-32');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32');
+            }, 3000);
+        }
+
+        // Checkout Seguro WhatsApp
+        document.getElementById('checkout-btn').addEventListener('click', () => {
+            if (cart.length === 0) {
+                showToast("El carrito está vacío");
+                return;
+            }
+
+            let message = "🐶 *Hola SanaPepts! Quiero realizar un pedido:*\n\n";
+            cart.forEach(item => {
+                message += `• ${item.name} x${item.qty} - $${(item.price * item.qty).toLocaleString()}\n`;
+            });
+            message += `\n💰 *Total Estimado:* ${cartTotalDisplay.innerText}\n\n`;
+            message += "Quedo atento/a para coordinar el pago y el envío. ¡Gracias!";
+
+            const encodedMsg = encodeURIComponent(message);
+            window.open(`https://wa.me/573001234567?text=${encodedMsg}`, '_blank');
+        });
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SanaPepts - Un Camino hacia el Bienestar</title>
+    <title>SanaPepts - Un Camino hacia el Bienestar Animal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -34,6 +34,15 @@
         .btn-primary:hover {
             background-color: #5d8272;
             transform: translateY(-2px);
+        }
+
+        /* Icono Garrita Corazón */
+        .paw-heart-icon {
+            width: 28px;
+            height: 28px;
+            fill: var(--primary);
+            display: inline-block;
+            vertical-align: middle;
         }
 
         /* Timeline Advanced Styles */
@@ -72,28 +81,69 @@
             padding: 1.5rem;
             transition: all 0.3s ease;
         }
-        .timeline-card:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transform: scale(1.02);
-        }
-        .timeline-img {
+        
+        /* Carousel Styles */
+        .carousel-container {
+            position: relative;
             width: 100%;
-            height: 200px;
-            object-fit: cover;
+            overflow: hidden;
             border-radius: 1rem;
-            margin-top: 1rem;
+            aspect-ratio: 4/3;
         }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.3);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 20;
+            transition: background 0.3s;
+        }
+        .carousel-btn:hover { background: rgba(0,0,0,0.6); }
+        .carousel-btn.prev { left: 10px; }
+        .carousel-btn.next { right: 10px; }
+        
+        .carousel-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 20;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .dot.active { background: white; }
 
         /* Cart Styles */
         #cart-sidebar {
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .cart-open #cart-sidebar {
-            transform: translateX(0);
-        }
-        .cart-closed #cart-sidebar {
-            transform: translateX(100%);
-        }
+        .cart-open #cart-sidebar { transform: translateX(0); }
+        .cart-closed #cart-sidebar { transform: translateX(100%); }
         #cart-overlay {
             transition: opacity 0.4s ease;
             pointer-events: none;
@@ -121,7 +171,6 @@
         </div>
         
         <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-4">
-            <!-- Items se cargan por JS -->
             <div class="text-center py-10 text-gray-400">
                 <i class="fas fa-shopping-cart text-5xl mb-4 block"></i>
                 <p>El carrito está vacío</p>
@@ -146,15 +195,14 @@
             <div class="flex justify-between h-20 items-center">
                 <div class="flex items-center space-x-2">
                     <span class="text-2xl font-bold text-soft-green nav-logo">SanaPepts</span>
-                   <!-- Icono Garrita Corazón Personalizado -->
                     <svg class="paw-heart-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35zM7.5 7c-.83 0-1.5.67-1.5 1.5S6.67 10 7.5 10s1.5-.67 1.5-1.5S8.33 7 7.5 7zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5S17.33 7 16.5 7zm-4.5-2c-.83 0-1.5.67-1.5 1.5S11.17 8 12 8s1.5-.67 1.5-1.5S12.83 5 12 5z"/>
                     </svg>
                 </div>
                 <div class="hidden md:flex space-x-8">
                     <a href="#inicio" class="text-gray-600 hover:text-soft-green font-medium transition">Inicio</a>
-                    <a href="#beneficios" class="text-gray-600 hover:text-soft-green font-medium transition">Lo que descubrí</a>
                     <a href="#historia-sana" class="text-gray-600 hover:text-soft-green font-medium transition">Historia de Sana</a>
+                    <a href="#beneficios" class="text-gray-600 hover:text-soft-green font-medium transition">Beneficios</a>
                     <a href="#catalogo" class="text-gray-600 hover:text-soft-green font-medium transition">Productos</a>
                 </div>
                 <div class="flex items-center gap-4">
@@ -162,7 +210,6 @@
                         <i class="fas fa-shopping-cart text-xl"></i>
                         <span id="cart-count" class="absolute -top-1 -right-1 bg-soft-green text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
                     </button>
-                    <a href="#contacto" class="hidden md:block border-2 border-soft-green text-soft-green px-6 py-2 rounded-full text-sm font-bold hover:bg-soft-green hover:text-white transition">Contacto</a>
                 </div>
             </div>
         </div>
@@ -174,93 +221,45 @@
             <h1 class="text-4xl md:text-6xl text-gray-900 mb-8 max-w-4xl mx-auto leading-tight">
                 Buscando el bienestar de los que <span class="text-soft-green">más amamos</span>.
             </h1>
-            <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-                Comparto mi experiencia con el <strong>BPC 157(Compuesto de Protección Corporal)</strong>. Una alternativa inyectable que cambió la vida de mi familia animal y que hoy quiero que más personas conozcan.
+            <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
+                Comparto mi experiencia con el <strong>BPC 157 (Compuesto de Protección Corporal)</strong>. Una alternativa inyectable que cambió la vida de mi familia animal y que hoy quiero que más personas conozcan.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 <a href="#historia-sana" class="btn-primary text-white px-10 py-5 rounded-full font-bold shadow-xl">Ver historia de Sana</a>
-                <a href="#catalogo" class="bg-white text-gray-800 border border-gray-200 px-10 py-5 rounded-full font-bold hover:bg-gray-50 transition">Comprar BPC 157</a>
+                <a href="#catalogo" class="bg-white text-gray-800 border border-gray-200 px-10 py-5 rounded-full font-bold hover:bg-gray-50 transition">Ver Productos</a>
             </div>
         </div>
     </header>
 
-    <!-- Beneficios Breve -->
-    <section id="beneficios" class="py-24 px-4">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl text-gray-900 mb-4">¿Por qué comparto de BPC 157?</h2>
-                <p class="text-gray-500 max-w-2xl mx-auto">He aprendido que este péptido no solo actúa en un lugar; su capacidad de reparación integral es lo que lo hace tan especial para nuestras mascotas.</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="bg-[#fdfcf9] p-8 rounded-3xl border border-orange-100 shadow-sm">
-                    <div class="text-orange-500 mb-6 text-3xl"><i class="fas fa-hand-holding-heart"></i></div>
-                    <h3 class="text-xl font-bold mb-3">Estómago</h3>
-                    <p class="text-gray-500 text-sm">- Protege el tracto digestivo tras años de medicación crónica.</p>
-                    <p class="text-gray-500 text-sm">- Reduce la formación de úlceras gástricas.</p>
-                    <p class="text-gray-500 text-sm">- Favorece la reparación de la mucosa intestinal.</p>
-                    <p class="text-gray-500 text-sm">- Protege contra daños causados por sustancias irritantes (como alcohol o fármacos)</p>
-                </div>
-                <div class="bg-[#f9fafb] p-8 rounded-3xl border border-blue-100 shadow-sm">
-                    <div class="text-blue-500 mb-6 text-3xl"><i class="fas fa-bone"></i></div>
-                    <h3 class="text-xl font-bold mb-3">Huesos</h3>
-                    <p class="text-gray-500 text-sm">- Soporte esencial y problemas degenerativos.</p>
-                    <p class="text-gray-500 text-sm">- Mejora la recuperación de fracturas óseas.</p>
-                    <p class="text-gray-500 text-sm">- Posible mejora en la integración hueso-tendón.</p>
-                </div>
-                <div class="bg-[#f9fbf9] p-8 rounded-3xl border border-green-100 shadow-sm">
-                    <div class="text-green-500 mb-6 text-3xl"><i class="fas fa-walking"></i></div>
-                    <h3 class="text-xl font-bold mb-3">Músculos</h3>
-                    <p class="text-gray-500 text-sm">- Acelera la curación de heridas (piel, músculo, tendones y ligamentos).</p>
-                    <p class="text-gray-500 text-sm">- Mejora la regeneración de tejido muscular y conectivo.</p>
-                    <p class="text-gray-500 text-sm">- Se ha observado reparación más rápida en lesiones de tendones y ligamentos</p>
-                </div>
-                <div class="bg-[#fbf9fb] p-8 rounded-3xl border border-purple-100 shadow-sm">
-                    <div class="text-purple-500 mb-6 text-3xl"><i class="fas fa-brain"></i></div>
-                    <h3 class="text-xl font-bold mb-3">Nervios</h3>
-                    <p class="text-gray-500 text-sm">- Ayuda a la regeneración neuronal en compresiones de columna.</p>
-                    <p class="text-gray-500 text-sm">- Puede ayudar en la recuperación de lesiones nerviosas.</p>
-                    <p class="text-gray-500 text-sm">- Se han observado efectos positivos en modelos de daño cerebral y lesiones de médula espinal.</p>
-                    <p class="text-gray-500 text-sm">- Potencial modulación de neurotransmisores (como dopamina y serotonina).</p>
-                </div>
-                 <div class="bg-[#fbf9fb] p-8 rounded-3xl border border-purple-100 shadow-sm">
-                    <div class="text-purple-500 mb-6 text-3xl"><i class="fas fa-brain"></i></div>
-                    <h3 class="text-xl font-bold mb-3">Vasos sanguineos</h3>
-                    <p class="text-gray-500 text-sm">- Estimula la formación de nuevos vasos sanguíneos.</p>
-                    <p class="text-gray-500 text-sm">- Mejora el flujo sanguíneo en tejidos dañados.</p>
-                    <p class="text-gray-500 text-sm">- Contribuye a la cicatrización general.</p>
-               </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Historia de Éxito: Sana -->
+    <!-- Historia de Sana con Carruseles -->
     <section id="historia-sana" class="py-24 px-4 bg-gray-900 text-white overflow-hidden">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
                 <span class="text-soft-green font-bold tracking-widest uppercase text-sm mb-2 block">Bitácora de vida</span>
                 <h2 class="text-4xl md:text-5xl mb-6">Nuestra Historia con Sana</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto">Aquí comparto cómo fue evolucionando Sana paso a paso desde que descubrimos este camino.</p>
+                <p class="text-gray-400 max-w-2xl mx-auto">Sana padece "Espondilosis deformante marcada". Muchos hubiesen optado por la eutanasia, pero nosotros elegimos el camino de la calidad de vida.</p>
             </div>
-
+            
             <div class="flex flex-col lg:flex-row gap-12 items-start">
-                <div class="lg:w-2/3 w-full">
+                <div class="lg:w-3/4 w-full mx-auto">
                     <div class="timeline-container">
-                        <!-- Punto 1 -->
+                        
+                        <!-- Momento 1 -->
                         <div class="timeline-item">
                             <div class="timeline-dot"></div>
                             <div class="timeline-card">
                                 <div class="flex flex-col md:flex-row gap-6">
                                     <div class="md:w-1/2">
-                                        <h4 class="text-xl font-bold text-soft-green mb-2">Momento 1: El dia que todo cambio</h4>
-                                        <p class="text-gray-400 text-sm leading-relaxed">Sana apenas podía moverse. Tiene "Espendoliosis deformante marcada" por una caida que tuvo tiempo atras, la tenia con CBD y artitabs. y un dia no pudo levantarse mas. El dolor cervical era agudo. Se veía triste, agotada e impotente.</p>
+                                        <h4 class="text-xl font-bold text-soft-green mb-2">Momento 1: El día que todo cambió</h4>
+                                        <p class="text-gray-400 text-sm leading-relaxed">
+                                            Sana apenas podía moverse. La caída tiempo atrás pasó factura. La teníamos con CBD y Artitabs, pero un día no pudo levantarse más. El dolor cervical era agudo; se veía triste, agotada e impotente.
+                                        </p>
                                     </div>
-                              <div class="md:w-1/2">
+                                    <div class="md:w-1/2">
                                         <div class="carousel-container" id="carousel-1">
                                             <div class="carousel-track">
                                                 <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80&w=600" alt="Sana triste"></div>
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1591768575198-88dac53fbd0a?auto=format&fit=crop&q=80&w=600" alt="Sana descansando"></div>
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=600" alt="Sana mirada"></div>
+                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1591768575198-88dac53fbd0a?auto=format&fit=crop&q=80&w=600" alt="Sana agotada"></div>
                                             </div>
                                             <button class="carousel-btn prev" onclick="moveCarousel('carousel-1', -1)"><i class="fas fa-chevron-left"></i></button>
                                             <button class="carousel-btn next" onclick="moveCarousel('carousel-1', 1)"><i class="fas fa-chevron-right"></i></button>
@@ -270,149 +269,231 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Punto 2 -->
+
+                        <!-- Momento 2 -->
                         <div class="timeline-item">
                             <div class="timeline-dot"></div>
                             <div class="timeline-card">
                                 <div class="flex flex-col md:flex-row-reverse gap-6">
                                     <div class="md:w-1/2">
-                                        <h4 class="text-xl font-bold text-soft-green mb-2">Momento 2: Hospitalizacion</h4>
-                                        <p class="text-gray-400 text-sm leading-relaxed">Tres dias de hospitalizacion, aun sin poder levantarse, un coctel de antinflamatorios y medicamentos para el dolor y algo nuevo "HotSpot" o "puntos calientes".</p>
-                                   <div class="md:w-1/2">
+                                        <h4 class="text-xl font-bold text-soft-green mb-2">Momento 2: Hospitalización</h4>
+                                        <p class="text-gray-400 text-sm leading-relaxed">
+                                            Tres días de hospitalización. Aún sin poder levantarse, recibía un cóctel de antiinflamatorios y analgésicos. Apareció algo nuevo: "HotSpot" o puntos calientes en su piel por el estrés y la inmovilidad.
+                                        </p>
+                                    </div>
+                                    <div class="md:w-1/2">
                                         <div class="carousel-container" id="carousel-2">
                                             <div class="carousel-track">
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80&w=600" alt="Sana triste"></div>
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1591768575198-88dac53fbd0a?auto=format&fit=crop&q=80&w=600" alt="Sana descansando"></div>
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=600" alt="Sana mirada"></div>
+                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&q=80&w=600" alt="Hospitalización"></div>
+                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=600" alt="Medicamentos"></div>
                                             </div>
-                                            <button class="carousel-btn prev" onclick="moveCarousel('carousel-1', -1)"><i class="fas fa-chevron-left"></i></button>
-                                            <button class="carousel-btn next" onclick="moveCarousel('carousel-1', 1)"><i class="fas fa-chevron-right"></i></button>
+                                            <button class="carousel-btn prev" onclick="moveCarousel('carousel-2', -1)"><i class="fas fa-chevron-left"></i></button>
+                                            <button class="carousel-btn next" onclick="moveCarousel('carousel-2', 1)"><i class="fas fa-chevron-right"></i></button>
                                             <div class="carousel-dots"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                <!--Punto 3-->
-                    <div class="timeline-item">
+
+                        <!-- Momento 3 -->
+                        <div class="timeline-item">
                             <div class="timeline-dot"></div>
                             <div class="timeline-card">
                                 <div class="flex flex-col md:flex-row gap-6">
                                     <div class="md:w-1/2">
-                                        <h4 class="text-xl font-bold text-soft-green mb-2">Momento 3: La nueva vida</h4>
-                                        <p class="text-gray-400 text-sm leading-relaxed">En la casa 5 pastillas diarias, aun con sonda, ya que no podia levantarse, verla temblar del dolor, cuidando los hotspot, vaciando la sonda..? Te resulta familiar?.</p>
+                                        <h4 class="text-xl font-bold text-soft-green mb-2">Momento 3: La "nueva" vida</h4>
+                                        <p class="text-gray-400 text-sm leading-relaxed">
+                                            Regresamos a casa con 5 pastillas diarias y sonda, ya que no podía levantarse. Verla temblar de dolor, cuidar los hotspots, vaciar la sonda... ¿Te resulta familiar? Es una carga emocional y física inmensa.
+                                        </p>
                                     </div>
-                            <div class="md:w-1/2">
+                                    <div class="md:w-1/2">
                                         <div class="carousel-container" id="carousel-3">
                                             <div class="carousel-track">
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80&w=600" alt="Sana triste"></div>
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1591768575198-88dac53fbd0a?auto=format&fit=crop&q=80&w=600" alt="Sana descansando"></div>
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=600" alt="Sana mirada"></div>
+                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1581888227599-779811939961?auto=format&fit=crop&q=80&w=600" alt="Cuidado en casa"></div>
+                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&q=80&w=600" alt="Día a día"></div>
                                             </div>
-                                            <button class="carousel-btn prev" onclick="moveCarousel('carousel-1', -1)"><i class="fas fa-chevron-left"></i></button>
-                                            <button class="carousel-btn next" onclick="moveCarousel('carousel-1', 1)"><i class="fas fa-chevron-right"></i></button>
+                                            <button class="carousel-btn prev" onclick="moveCarousel('carousel-3', -1)"><i class="fas fa-chevron-left"></i></button>
+                                            <button class="carousel-btn next" onclick="moveCarousel('carousel-3', 1)"><i class="fas fa-chevron-right"></i></button>
                                             <div class="carousel-dots"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Punto 4 -->
-                   <div class="timeline-item">
+
+                        <!-- Momento 4 -->
+                        <div class="timeline-item">
                             <div class="timeline-dot"></div>
                             <div class="timeline-card">
-                                <div class="flex flex-col md:flex-row gap-6">
+                                <div class="flex flex-col md:flex-row-reverse gap-6">
                                     <div class="md:w-1/2">
-                                        <h4 class="text-xl font-bold text-soft-green mb-2">Momento 4: Aceptacion</h4>
-                                        <p class="text-gray-400 text-sm leading-relaxed">Sana logro controlar esfinteres nuevamente, hacina fuerza para levantarse y la apoyabamos para lograr hacer pipi, se quito la sonda, examenes de bacterias, ecografias, dinero, dinero, mucha atencion y transochar para apoyarla con las ida al baño, cuando no alcanzabamos amanecia mojada de pipi y popo.</p>
+                                        <h4 class="text-xl font-bold text-soft-green mb-2">Momento 4: Aceptación</h4>
+                                        <p class="text-gray-400 text-sm leading-relaxed">
+                                            Sana logró controlar esfínteres, pero necesitaba apoyo total para hacer pipí. Se quitó la sonda, vinieron exámenes, ecografías, gastos constantes y trasnochar. Si no alcanzábamos a apoyarla, amanecía mojada. Fue una prueba de amor absoluto.
+                                        </p>
                                     </div>
-                           <div class="md:w-1/2">
+                                    <div class="md:w-1/2">
                                         <div class="carousel-container" id="carousel-4">
                                             <div class="carousel-track">
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80&w=600" alt="Sana triste"></div>
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1591768575198-88dac53fbd0a?auto=format&fit=crop&q=80&w=600" alt="Sana descansando"></div>
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=600" alt="Sana mirada"></div>
+                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1544568100-847a948585b9?auto=format&fit=crop&q=80&w=600" alt="Sana esfuerzo"></div>
+                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1551730459-92db2a308d6a?auto=format&fit=crop&q=80&w=600" alt="Trasnocho"></div>
                                             </div>
-                                            <button class="carousel-btn prev" onclick="moveCarousel('carousel-1', -1)"><i class="fas fa-chevron-left"></i></button>
-                                            <button class="carousel-btn next" onclick="moveCarousel('carousel-1', 1)"><i class="fas fa-chevron-right"></i></button>
+                                            <button class="carousel-btn prev" onclick="moveCarousel('carousel-4', -1)"><i class="fas fa-chevron-left"></i></button>
+                                            <button class="carousel-btn next" onclick="moveCarousel('carousel-4', 1)"><i class="fas fa-chevron-right"></i></button>
                                             <div class="carousel-dots"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                       
-                  <!-- Punto 5 -->
-                   <div class="timeline-item">
+
+                        <!-- Momento 5 -->
+                        <div class="timeline-item">
                             <div class="timeline-dot"></div>
                             <div class="timeline-card">
                                 <div class="flex flex-col md:flex-row gap-6">
                                     <div class="md:w-1/2">
                                         <h4 class="text-xl font-bold text-soft-green mb-2">Momento 5: Esperanza</h4>
-                                        <p class="text-gray-400 text-sm leading-relaxed">Aparecio un angel, con un perro con una condicion parecida, me recomendo este peptido me regalo un poco y al tercer dia Sana, ya podia caminar mejor sola, tu anima era mas activo, lograba sentarse con mas facilidad y en alguna ocasiones lograba levantarse sola y hacer pipi sola!</p>
+                                        <p class="text-gray-400 text-sm leading-relaxed">
+                                            Apareció un ángel con un perro en condición similar que me recomendó este péptido. Al tercer día de uso, Sana ya podía caminar mejor sola. Su ánimo cambió, lograba sentarse y ¡en ocasiones se levantaba sola a hacer pipí!
+                                        </p>
                                     </div>
-                             <div class="md:w-1/2">
+                                    <div class="md:w-1/2">
                                         <div class="carousel-container" id="carousel-5">
                                             <div class="carousel-track">
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80&w=600" alt="Sana triste"></div>
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1591768575198-88dac53fbd0a?auto=format&fit=crop&q=80&w=600" alt="Sana descansando"></div>
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=600" alt="Sana mirada"></div>
+                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&q=80&w=600" alt="Sana trotando"></div>
+                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&q=80&w=600" alt="Sana activa"></div>
                                             </div>
-                                            <button class="carousel-btn prev" onclick="moveCarousel('carousel-1', -1)"><i class="fas fa-chevron-left"></i></button>
-                                            <button class="carousel-btn next" onclick="moveCarousel('carousel-1', 1)"><i class="fas fa-chevron-right"></i></button>
+                                            <button class="carousel-btn prev" onclick="moveCarousel('carousel-5', -1)"><i class="fas fa-chevron-left"></i></button>
+                                            <button class="carousel-btn next" onclick="moveCarousel('carousel-5', 1)"><i class="fas fa-chevron-right"></i></button>
                                             <div class="carousel-dots"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                       
-                                <!-- Punto 6 -->
-                   <div class="timeline-item">
+
+                        <!-- Momento 6 -->
+                        <div class="timeline-item">
                             <div class="timeline-dot"></div>
-                            <div class="timeline-card">
-                                <div class="flex flex-col md:flex-row gap-6">
+                            <div class="timeline-card bg-soft-green/10 border-soft-green/30">
+                                <div class="flex flex-col md:flex-row-reverse gap-6">
                                     <div class="md:w-1/2">
-                                        <h4 class="text-xl font-bold text-soft-green mb-2">Momento 6: Mejorando</h4>
-                                        <p class="text-gray-400 text-sm leading-relaxed">Me siento confortable, veo que si hay como poder brindarle una mejor calidad de vida a mi hija canina de 14 años!, que aunque muchos ya hubiesen obtado por eutanasia, a un humano la hubiesen aplicado por no poder mover sus piernas? En los centros veterinarios veo muchas personas solas, con tratamientos de drogeria portable, con sus perros de un tratamiento a otro. Por eso me veo en la necesidad de compartir este peptido que realmente esta cambiando nuestras vidas</p>
+                                        <h4 class="text-xl font-bold text-soft-green mb-2">Momento 6: Mejorando la Vida</h4>
+                                        <p class="text-gray-400 text-sm leading-relaxed">
+                                            Me siento confortable al ver que sí hay cómo brindarle calidad de vida a mi hija canina de 14 años. En centros veterinarios veo a tantas personas solas, saltando de un tratamiento a otro sin resultados. Por eso siento la necesidad de compartir este péptido que realmente está cambiando nuestras vidas. A un humano no lo "eutanasiarían" por no mover sus piernas, ¿por qué a ellos sí, si hay esperanza?
+                                        </p>
                                     </div>
-                              <div class="md:w-1/2">
+                                    <div class="md:w-1/2">
                                         <div class="carousel-container" id="carousel-6">
                                             <div class="carousel-track">
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80&w=600" alt="Sana triste"></div>
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1591768575198-88dac53fbd0a?auto=format&fit=crop&q=80&w=600" alt="Sana descansando"></div>
-                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=600" alt="Sana mirada"></div>
+                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=600" alt="Sana Feliz"></div>
+                                                <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?auto=format&fit=crop&q=80&w=600" alt="Conexión Humana"></div>
                                             </div>
-                                            <button class="carousel-btn prev" onclick="moveCarousel('carousel-1', -1)"><i class="fas fa-chevron-left"></i></button>
-                                            <button class="carousel-btn next" onclick="moveCarousel('carousel-1', 1)"><i class="fas fa-chevron-right"></i></button>
+                                            <button class="carousel-btn prev" onclick="moveCarousel('carousel-6', -1)"><i class="fas fa-chevron-left"></i></button>
+                                            <button class="carousel-btn next" onclick="moveCarousel('carousel-6', 1)"><i class="fas fa-chevron-right"></i></button>
                                             <div class="carousel-dots"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                   </section>
-                        <!-- Fin -->
-                <div class="lg:w-1/3 w-full lg:sticky lg:top-24">
-                    <div class="bg-white/5 p-8 rounded-[2rem] border border-white/10">
-                        <h3 class="text-xl font-bold mb-6 text-soft-green">Recomendación Personal</h3>
-                        <p class="text-gray-400 text-sm mb-6 italic">"No vendemos productos, compartimos lo que funcionó para salvar a mi mascota. El BPC 157 es, para mí, el descubrimiento más grande en salud animal."</p>
-                        <a href="#catalogo" class="block text-center btn-primary text-white py-3 rounded-full font-bold">Ver producto usado por Sana</a>
+
                     </div>
                 </div>
             </div>
         </div>
-     
+    </section>
 
-    <!-- Catálogo de Productos Reales -->
+    <!-- Beneficios Expandidos -->
+    <section id="beneficios" class="py-24 px-4 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-soft-green font-bold tracking-widest uppercase text-sm mb-2 block">Evidencia y Resultados</span>
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Por qué comparto el BPC-157</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed">Este compuesto ha demostrado ser un regenerador sistémico con múltiples áreas de acción que fueron clave para la recuperación de Sana.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Estómago -->
+                <div class="p-8 rounded-[2rem] border border-gray-100 hover:shadow-xl hover:shadow-green-900/5 transition duration-500 bg-gray-50/50">
+                    <div class="w-12 h-12 bg-green-100 text-soft-green rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-stomach text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Estómago</h3>
+                    <ul class="space-y-3 text-gray-600 text-sm">
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-soft-green mt-1"></i> Protege el tracto digestivo tras años de medicación crónica.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-soft-green mt-1"></i> Reduce la formación de úlceras gástricas.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-soft-green mt-1"></i> Favorece la reparación de la mucosa intestinal.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-soft-green mt-1"></i> Protege contra daños de alcohol o fármacos irritantes.</li>
+                    </ul>
+                </div>
+
+                <!-- Huesos -->
+                <div class="p-8 rounded-[2rem] border border-gray-100 hover:shadow-xl hover:shadow-green-900/5 transition duration-500 bg-gray-50/50">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-bone text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Huesos</h3>
+                    <ul class="space-y-3 text-gray-600 text-sm">
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-blue-500 mt-1"></i> Soporte esencial en problemas degenerativos.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-blue-500 mt-1"></i> Mejora notablemente la recuperación de fracturas.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-blue-500 mt-1"></i> Optimiza la integración entre hueso y tendón.</li>
+                    </ul>
+                </div>
+
+                <!-- Músculos y Tejidos -->
+                <div class="p-8 rounded-[2rem] border border-gray-100 hover:shadow-xl hover:shadow-green-900/5 transition duration-500 bg-gray-50/50">
+                    <div class="w-12 h-12 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-hand-holding-heart text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Músculos y Tejidos</h3>
+                    <ul class="space-y-3 text-gray-600 text-sm">
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-red-500 mt-1"></i> Acelera la curación de heridas (piel, músculo, tendones).</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-red-500 mt-1"></i> Mejora la regeneración de tejido muscular y conectivo.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-red-500 mt-1"></i> Reparación ultra-rápida en lesiones de ligamentos.</li>
+                    </ul>
+                </div>
+
+                <!-- Nervios -->
+                <div class="p-8 rounded-[2rem] border border-gray-100 hover:shadow-xl hover:shadow-green-900/5 transition duration-500 bg-gray-50/50">
+                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-brain text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Nervios</h3>
+                    <ul class="space-y-3 text-gray-600 text-sm">
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-purple-500 mt-1"></i> Regeneración neuronal en compresiones de columna.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-purple-500 mt-1"></i> Ayuda crítica en la recuperación de lesiones nerviosas.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-purple-500 mt-1"></i> Efectos positivos en daño cerebral y médula espinal.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-purple-500 mt-1"></i> Modulación de dopamina y serotonina.</li>
+                    </ul>
+                </div>
+
+                <!-- Vasos Sanguíneos -->
+                <div class="p-8 rounded-[2rem] border border-gray-100 hover:shadow-xl hover:shadow-green-900/5 transition duration-500 bg-gray-50/50">
+                    <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-tint text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Vasos Sanguíneos</h3>
+                    <ul class="space-y-3 text-gray-600 text-sm">
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-rose-500 mt-1"></i> Estimula la formación de nuevos vasos sanguíneos (Angiogénesis).</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-rose-500 mt-1"></i> Mejora el flujo sanguíneo en tejidos con poco riego.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-rose-500 mt-1"></i> Contribuye a una cicatrización integral y profunda.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catálogo -->
     <section id="catalogo" class="py-24 px-4 bg-[#fcfcfc]">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl mb-4">Lo que puedes adquirir</h2>
-                <p class="text-gray-500">Complementos que pueden ayudar</p>
+                <h2 class="text-3xl md:text-4xl mb-4">Ayúdalo tú también</h2>
+                <p class="text-gray-500">Productos que usamos en nuestro propio protocolo para devolver la movilidad.</p>
             </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 <!-- Producto 1 -->
                 <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm flex flex-col group">
                     <div class="aspect-square bg-gray-50 rounded-2xl mb-6 overflow-hidden flex items-center justify-center relative">
@@ -422,13 +503,12 @@
                     <h3 class="font-bold text-lg mb-1">Péptido BPC-157 (5mg)</h3>
                     <p class="text-gray-400 text-xs mb-4">Vial inyectable liofilizado de alta pureza.</p>
                     <div class="mt-auto flex items-center justify-between">
-                        <span class="text-xl font-bold text-gray-900">$400.000</span>
+                        <span class="text-xl font-bold text-gray-900">$185.000</span>
                         <button onclick="addToCart('BPC-157 5mg', 185000)" class="bg-soft-green text-white w-12 h-12 rounded-xl flex items-center justify-center hover:bg-[#5d8272] transition">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
                 </div>
-
                 <!-- Producto 2 -->
                 <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm flex flex-col group">
                     <div class="aspect-square bg-gray-50 rounded-2xl mb-6 overflow-hidden flex items-center justify-center relative">
@@ -443,50 +523,13 @@
                         </button>
                     </div>
                 </div>
-
-                <!-- Producto 3 -->
-                <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm flex flex-col group opacity-60">
-                    <div class="aspect-square bg-gray-100 rounded-2xl mb-6 overflow-hidden flex items-center justify-center relative grayscale">
-                        <i class="fas fa-flask text-4xl text-gray-300"></i>
-                        <span class="absolute top-4 left-4 bg-gray-400 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase">Próximamente</span>
-                    </div>
-                    <h3 class="font-bold text-lg mb-1 text-gray-400">TB-500 (Regenerativo)</h3>
-                    <p class="text-gray-400 text-xs mb-4">Potenciador de reparación de tejidos profundos.</p>
-                    <div class="mt-auto flex items-center justify-between">
-                        <span class="text-xl font-bold text-gray-300">Pendiente</span>
-                        <button class="bg-gray-200 text-gray-400 w-12 h-12 rounded-xl flex items-center justify-center cursor-not-allowed">
-                            <i class="fas fa-lock"></i>
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer id="contacto" class="bg-gray-900 text-white pt-20 pb-10 px-4">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 mb-12 border-b border-white/5 pb-12">
-            <div class="col-span-2">
-                <span class="text-3xl font-bold text-soft-green nav-logo block mb-6">SanaPepts</span>
-                <p class="text-gray-400 max-w-sm mb-6">Compartiendo experiencias y bienestar para nuestras familias animales.</p>
-            </div>
-            <div>
-                <h4 class="font-bold mb-6">Información</h4>
-                <ul class="space-y-3 text-gray-500 text-sm">
-                    <li><a href="#" class="hover:text-white transition">Cómo reconstituir</a></li>
-                    <li><a href="#" class="hover:text-white transition">Protocolo de Sana</a></li>
-                    <li><a href="#" class="hover:text-white transition">Dosis Sugeridas</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold mb-6">Consultas</h4>
-                <p class="text-gray-500 text-sm mb-4">¿Dudas sobre cómo empezar?</p>
-                <p class="text-soft-green font-bold">sanapepts@gmail.com</p>
-            </div>
-        </div>
-        <div class="text-center text-gray-600 text-xs">
-            <p>&copy; 2026 SanaPepts - Bienestar Animal Consentido.</p>
-        </div>
+    <!-- Footer Simple -->
+    <footer id="contacto" class="bg-gray-900 text-white pt-20 pb-10 px-4 text-center">
+        <p class="text-gray-600 text-xs">&copy; 2024 SanaPepts - Bienestar Animal Consentido.</p>
     </footer>
 
     <!-- Toast Notification -->
@@ -496,17 +539,59 @@
     </div>
 
     <script>
-        // Variables Globales
+        // Lógica de Carrusel
+        const carouselsState = {};
+
+        function initCarousels() {
+            document.querySelectorAll('.carousel-container').forEach(carousel => {
+                const id = carousel.id;
+                const track = carousel.querySelector('.carousel-track');
+                const slides = Array.from(track.children);
+                const dotsContainer = carousel.querySelector('.carousel-dots');
+                
+                carouselsState[id] = { index: 0, count: slides.length };
+
+                // Crear puntitos
+                slides.forEach((_, i) => {
+                    const dot = document.createElement('div');
+                    dot.className = `dot ${i === 0 ? 'active' : ''}`;
+                    dot.onclick = () => goToSlide(id, i);
+                    dotsContainer.appendChild(dot);
+                });
+            });
+        }
+
+        function moveCarousel(id, step) {
+            const state = carouselsState[id];
+            state.index = (state.index + step + state.count) % state.count;
+            updateCarouselUI(id);
+        }
+
+        function goToSlide(id, index) {
+            carouselsState[id].index = index;
+            updateCarouselUI(id);
+        }
+
+        function updateCarouselUI(id) {
+            const carousel = document.getElementById(id);
+            const track = carousel.querySelector('.carousel-track');
+            const dots = carousel.querySelectorAll('.dot');
+            const index = carouselsState[id].index;
+
+            track.style.transform = `translateX(-${index * 100}%)`;
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        // Carrito y UI
         let cart = [];
         const body = document.body;
-        const cartSidebar = document.getElementById('cart-sidebar');
-        const cartOverlay = document.getElementById('cart-overlay');
         const cartItemsContainer = document.getElementById('cart-items');
         const cartTotalDisplay = document.getElementById('cart-total');
         const cartCountDisplay = document.getElementById('cart-count');
         const toast = document.getElementById('toast');
 
-        // Toggle Carrito
         document.getElementById('open-cart').addEventListener('click', () => {
             body.classList.remove('cart-closed');
             body.classList.add('cart-open');
@@ -517,19 +602,15 @@
             body.classList.remove('cart-open');
         });
 
-        cartOverlay.addEventListener('click', () => {
+        document.getElementById('cart-overlay').addEventListener('click', () => {
             body.classList.add('cart-closed');
             body.classList.remove('cart-open');
         });
 
-        // Funciones del Carrito
         function addToCart(name, price) {
             const existingItem = cart.find(item => item.name === name);
-            if (existingItem) {
-                existingItem.qty++;
-            } else {
-                cart.push({ name, price, qty: 1 });
-            }
+            if (existingItem) existingItem.qty++;
+            else cart.push({ name, price, qty: 1 });
             renderCart();
             showToast(`¡${name} agregado!`);
         }
@@ -554,11 +635,7 @@
             let count = 0;
 
             if (cart.length === 0) {
-                cartItemsContainer.innerHTML = `
-                    <div class="text-center py-10 text-gray-400">
-                        <i class="fas fa-shopping-cart text-5xl mb-4 block"></i>
-                        <p>Aún no has seleccionado productos</p>
-                    </div>`;
+                cartItemsContainer.innerHTML = '<div class="text-center py-10 text-gray-400"><i class="fas fa-shopping-cart text-5xl mb-4 block"></i><p>El carrito está vacío</p></div>';
             } else {
                 cart.forEach(item => {
                     total += item.price * item.qty;
@@ -576,9 +653,7 @@
                                 <span class="px-2 text-xs font-bold">${item.qty}</span>
                                 <button onclick="updateQty('${item.name}', 1)" class="px-2 py-1 text-gray-400 hover:text-soft-green">+</button>
                             </div>
-                            <button onclick="removeFromCart('${item.name}')" class="text-gray-300 hover:text-red-400 px-2">
-                                <i class="fas fa-trash-alt text-sm"></i>
-                            </button>
+                            <button onclick="removeFromCart('${item.name}')" class="text-gray-300 hover:text-red-400 px-2"><i class="fas fa-trash-alt text-sm"></i></button>
                         </div>
                     `;
                     cartItemsContainer.appendChild(div);
@@ -592,28 +667,19 @@
         function showToast(msg) {
             document.getElementById('toast-msg').innerText = msg;
             toast.classList.remove('translate-y-32');
-            setTimeout(() => {
-                toast.classList.add('translate-y-32');
-            }, 3000);
+            setTimeout(() => toast.classList.add('translate-y-32'), 3000);
         }
 
-        // Checkout Seguro WhatsApp
         document.getElementById('checkout-btn').addEventListener('click', () => {
-            if (cart.length === 0) {
-                showToast("El carrito está vacío");
-                return;
-            }
-
+            if (cart.length === 0) return;
             let message = "🐶 *Hola SanaPepts! Quiero realizar un pedido:*\n\n";
-            cart.forEach(item => {
-                message += `• ${item.name} x${item.qty} - $${(item.price * item.qty).toLocaleString()}\n`;
-            });
-            message += `\n💰 *Total Estimado:* ${cartTotalDisplay.innerText}\n\n`;
-            message += "Quedo atento/a para coordinar el pago y el envío. ¡Gracias!";
-
-            const encodedMsg = encodeURIComponent(message);
-            window.open(`https://wa.me/573001234567?text=${encodedMsg}`, '_blank');
+            cart.forEach(item => message += `• ${item.name} x${item.qty} - $${(item.price * item.qty).toLocaleString()}\n`);
+            message += `\n💰 *Total:* ${cartTotalDisplay.innerText}`;
+            window.open(`https://wa.me/573001234567?text=${encodeURIComponent(message)}`, '_blank');
         });
+
+        // Iniciar todo al cargar
+        window.onload = initCarousels;
     </script>
 </body>
 </html>

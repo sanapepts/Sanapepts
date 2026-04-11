@@ -13,6 +13,7 @@
             --secondary: #f4f1ea;
             --accent: #d4a373;
             --text-dark: #2d3436;
+            --whatsapp-green: #25D366;
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -153,9 +154,56 @@
             opacity: 1;
             pointer-events: auto;
         }
+        /* Burbuja WhatsApp */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background-color: var(--whatsapp-green);
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 32px;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+            z-index: 40;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .pulse-animation {
+            animation: pulse-green 2s infinite;
+        }
+
+          @keyframes pulse-green {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
     </style>
 </head>
 <body class="cart-closed">
+
+    <!-- Burbuja WhatsApp -->
+    <a href="https://wa.me/573135458700?text=Hola,%20quisiera%20información%20sobre%20los%20productos." 
+       target="_blank" 
+       rel="noopener noreferrer"
+       class="whatsapp-float pulse-animation" 
+       title="Contáctanos por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
     <!-- Overlay Carrito -->
     <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-[60] opacity-0" onclick="toggleCart()"></div>
 
@@ -180,10 +228,10 @@
                 <span class="text-gray-500 font-medium">Total estimado:</span>
                 <span id="cart-total" class="text-2xl font-bold text-gray-900">$0</span>
             </div>
-            <button id="checkout-btn" onclick="checkout()" class="w-full btn-primary text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-green-900/10">
-                <i class="fab fa-whatsapp"></i> Finalizar por WhatsApp Seguro
+           <button onclick="checkoutWhatsApp()" class="w-full neo-gradient text-white py-5 rounded-2xl font-black uppercase tracking-widest hover:brightness-110 transition shadow-2xl flex items-center justify-center space-x-3">
+                <i class="fab fa-whatsapp text-xl"></i>
+                <span>Finalizar Pedido</span>
             </button>
-            <p class="text-[10px] text-gray-400 text-center mt-4 uppercase tracking-widest">Pago contra entrega o transferencia segura</p>
         </div>
     </aside> 
     <!-- Navegación -->
@@ -638,7 +686,6 @@
 
         function checkout() {
             if (cart.length === 0) return;
-            
             let message = "Hola SanaPepts! Quisiera realizar este pedido:\n\n";
             let total = 0;
             
